@@ -1,0 +1,12 @@
+xmpp:
+  host: "xmpp.<domain>"
+  port: 5222
+  jid: "rssbot@<domain>"
+  password: "<password>"
+
+rss:
+  poll_interval: 600  # 1 hour in seconds
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+
+database:
+  path: "./data/rss.db"
