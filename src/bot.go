@@ -15,14 +15,14 @@ import (
 
 type Bot struct {
 	cfg     *Config
-	db      *DB
+	db      DB
 	fetcher *Fetcher
 	client  *xmpp.Client
 	mu      sync.Mutex
 	running bool
 }
 
-func NewBot(cfg *Config, db *DB, fetcher *Fetcher) *Bot {
+func NewBot(cfg *Config, db DB, fetcher *Fetcher) *Bot {
 	return &Bot{
 		cfg:     cfg,
 		db:      db,

@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: rssbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rssbot
+  template:
+    metadata:
+      labels:
+        app: rssbot
+    spec:
+      containers:
+        - name: rssbot
+          image: rssbot:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: XMPP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rssbot-creds
+                  key: xmpp-host
+            - name: XMPP_PORT
+              value: "5222"
+            - name: XMPP_JID
+              valueFrom:
+                secretKeyRef:
+                  name: rssbot-creds
+                  key: xmpp-username
+            - name: XMPP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rssbot-creds
+                  key: xmpp-password
+            - name: RSS_POLL_INTERVAL
+              value: "600"
+            - name: RSS_USER_AGENT
+              value: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+            - name: DB_TYPE
+              value: "postgres"
+            - name: DB_HOST
+              value: "infra-rw.db.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rssbot-creds
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rssbot-creds
+                  key: password
+            - name: DB_NAME
+              value: "rssbot"
