@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: rssbot
-          image: rssbot:latest
+          image: ghcr.io/supu2/rssbot:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: XMPP_HOST
