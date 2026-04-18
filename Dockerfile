@@ -9,9 +9,9 @@ RUN go mod download
 
 COPY src/. .
 
-RUN CGO_ENABLED=1 go build -o rss-bot .
+RUN CGO_ENABLED=1 go build -o rssbot .
 
 FROM alpine:3.23
 WORKDIR /app
-COPY --from=0 /app/rss-bot .
-CMD ["rss-bot"]
+COPY --from=0 /usr/local/bin/rssbot .
+CMD ["rssbot"]

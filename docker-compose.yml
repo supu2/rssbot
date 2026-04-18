@@ -6,4 +6,4 @@ services:
     volumes:
       - ./config.yaml:/app/config.yaml
       - ./data/:/app/data
-    command: ["./rss-bot"]
+    command: ["./rssbot"]

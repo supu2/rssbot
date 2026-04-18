@@ -115,18 +115,18 @@ docker-compose up --build
 
 ```bash
 # Build
-docker build -t rss-bot .
+docker build -t rssbot .
 
 # Run
-docker run --rm -v $(pwd)/config.yaml:/app/config.yaml -v $(pwd)/data:/app/data rss-bot
+docker run --rm -v $(pwd)/config.yaml:/app/config.yaml -v $(pwd)/data:/app/data rssbot
 ```
 
 ### Local Development
 
 ```bash
 cd src
-go build -o rss-bot .
-./rss-bot -config ../config.yaml
+go build -o rssbot .
+./rssbot -config ../config.yaml
 ```
 
 ---
