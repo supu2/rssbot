@@ -214,7 +214,7 @@ func (b *Bot) listFeeds(userJID string) string {
 		if f.Title != "" && f.Title != f.URL {
 			lines = append(lines, fmt.Sprintf("  Title: %s", f.Title))
 		}
-		if f.Disabled {
+		if f.Disabled != 0 {
 			lines = append(lines, "  [DISABLED]")
 		}
 	}
@@ -251,7 +251,7 @@ func (b *Bot) checkFeeds() {
 	}
 
 	for _, feed := range feeds {
-		if feed.Disabled {
+		if feed.Disabled != 0 {
 			continue
 		}
 		items, _, err := b.fetcher.Fetch(feed.URL)

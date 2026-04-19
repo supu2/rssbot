@@ -28,7 +28,7 @@ type Feed struct {
 	Title      string
 	LastGUID   string
 	LastPoll   time.Time
-	Disabled   bool
+	Disabled   int
 	ErrorCount int
 }
 
@@ -152,9 +152,13 @@ func (db *sqliteDB) UpdateFeedLastGUID(id int64, guid string) error {
 }
 
 func (db *sqliteDB) SetFeedDisabled(userJID, url string, disabled bool) (int64, error) {
+	disabledInt := 0
+	if disabled {
+		disabledInt = 1
+	}
 	result, err := db.conn.Exec(
 		"UPDATE feeds SET disabled = ? WHERE user_jid = ? AND url = ?",
-		disabled, userJID, url,
+		disabledInt, userJID, url,
 	)
 	if err != nil {
 		return 0, err
