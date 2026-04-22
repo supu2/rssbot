@@ -132,12 +132,12 @@ func (b *Bot) handleCommand(userJID, cmd string) string {
 		if len(parts) < 2 {
 			return "Usage: disable <feed-url>"
 		}
-		return b.setFeedDisabled(userJID, parts[1], true)
+		return b.setFeedDisabled(userJID, parts[1], 1)
 	case "enable":
 		if len(parts) < 2 {
 			return "Usage: enable <feed-url>"
 		}
-		return b.setFeedDisabled(userJID, parts[1], false)
+		return b.setFeedDisabled(userJID, parts[1], 0)
 	case "list":
 		return b.listFeeds(userJID)
 	case "help":
@@ -185,7 +185,7 @@ func (b *Bot) deleteFeed(userJID, url string) string {
 	return "Feed deleted"
 }
 
-func (b *Bot) setFeedDisabled(userJID, url string, disabled bool) string {
+func (b *Bot) setFeedDisabled(userJID, url string, disabled int) string {
 	affected, err := b.db.SetFeedDisabled(userJID, url, disabled)
 	if err != nil {
 		return fmt.Sprintf("Error updating feed: %v", err)
@@ -193,7 +193,7 @@ func (b *Bot) setFeedDisabled(userJID, url string, disabled bool) string {
 	if affected == 0 {
 		return "Feed not found"
 	}
-	if disabled {
+	if disabled == 1 {
 		return "Feed disabled"
 	}
 	return "Feed enabled"
@@ -259,7 +259,7 @@ func (b *Bot) checkFeeds() {
 			log.Printf("Error fetching %s: %v", feed.URL, err)
 			count, err := b.db.IncrementErrorCount(feed.ID)
 			if err == nil && count >= 5 {
-				b.db.SetFeedDisabled(feed.UserJID, feed.URL, true)
+				b.db.SetFeedDisabled(feed.UserJID, feed.URL, 1)
 				b.sendMessage(feed.UserJID, fmt.Sprintf("Feed disabled due to 5 consecutive errors: %s\nError: %v", feed.URL, err))
 			}
 			continue

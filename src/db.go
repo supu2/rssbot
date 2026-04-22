@@ -15,7 +15,7 @@ type DB interface {
 	ListFeeds(userJID string) ([]Feed, error)
 	GetAllFeeds() ([]Feed, error)
 	UpdateFeedLastGUID(id int64, guid string) error
-	SetFeedDisabled(userJID, url string, disabled bool) (int64, error)
+SetFeedDisabled(userJID, url string, disabled int) (int64, error)
 	IncrementErrorCount(id int64) (int, error)
 	ResetErrorCount(id int64) error
 	Close() error
@@ -151,14 +151,10 @@ func (db *sqliteDB) UpdateFeedLastGUID(id int64, guid string) error {
 	return err
 }
 
-func (db *sqliteDB) SetFeedDisabled(userJID, url string, disabled bool) (int64, error) {
-	disabledInt := 0
-	if disabled {
-		disabledInt = 1
-	}
+func (db *sqliteDB) SetFeedDisabled(userJID, url string, disabled int) (int64, error) {
 	result, err := db.conn.Exec(
 		"UPDATE feeds SET disabled = ? WHERE user_jid = ? AND url = ?",
-		disabledInt, userJID, url,
+		disabled, userJID, url,
 	)
 	if err != nil {
 		return 0, err
@@ -305,7 +301,7 @@ func (db *postgresDB) UpdateFeedLastGUID(id int64, guid string) error {
 	return err
 }
 
-func (db *postgresDB) SetFeedDisabled(userJID, url string, disabled bool) (int64, error) {
+func (db *postgresDB) SetFeedDisabled(userJID, url string, disabled int) (int64, error) {
 	result, err := db.conn.Exec(
 		"UPDATE feeds SET disabled = $1 WHERE user_jid = $2 AND url = $3",
 		disabled, userJID, url,
